@@ -1,5 +1,5 @@
 # Full Stack Open 2022 - Course Info Section
-This directory contains the application required for exercises 1.3-1.5 of the Full Stack Open 2022 course.
+This directory contains the application required for exercises 1.6-1.14 of the Full Stack Open 2022 course.
 
 # Getting Started with Create React App
 
