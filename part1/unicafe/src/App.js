@@ -18,6 +18,10 @@ const App = () => {
   const handleBadClick = () => setBad(bad + 1);
 
   const totalFeedbackCount = () => (good + neutral + bad);
+  /**
+    averageFeedbackScore() returns the average score, 
+    where good = 1 point, neutral = 0 points, and bad = -1 points.
+  */
   const averageFeedbackScore = () => {
     const divisor = totalFeedbackCount();
     return (divisor !== 0 ? ((good - bad) / divisor) : 0);
