@@ -5,6 +5,7 @@ import {
     totalString, 
     averageScoreString,
     positiveFeedbackString,
+    noFeedbackString,
 } from "./Strings";
 
 const Statistics = ({good, neutral, bad}) => {
@@ -24,16 +25,19 @@ const Statistics = ({good, neutral, bad}) => {
       return (divisor !== 0 ? (good / divisor * 100) : 0)
     };
   
-    return(
-      <>
-      <div>{goodString}: {good}</div>
-      <div>{neutralString}: {neutral}</div>
-      <div>{badString}: {bad}</div>
-      <div>{totalString}: {totalFeedbackCount()}</div>
-      <div>{averageScoreString}: {averageFeedbackScore()}</div>
-      <div>{positiveFeedbackString}: {percentagePositiveFeedback()}%</div>
-      </>
-    )
+    return (totalFeedbackCount() === 0
+        ? <>{noFeedbackString}</>
+        : (
+            <>
+            <div>{goodString}: {good}</div>
+            <div>{neutralString}: {neutral}</div>
+            <div>{badString}: {bad}</div>
+            <div>{totalString}: {totalFeedbackCount()}</div>
+            <div>{averageScoreString}: {averageFeedbackScore()}</div>
+            <div>{positiveFeedbackString}: {percentagePositiveFeedback()}%</div>
+            </>
+        )
+    );
   }
 
   export default Statistics;
