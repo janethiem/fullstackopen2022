@@ -29,14 +29,16 @@ const Statistics = ({good, neutral, bad}) => {
     return (totalFeedbackCount() === 0
         ? <>{noFeedbackString}</>
         : (
-            <>
-            <StatisticsLine text={goodString} value={good} />
-            <StatisticsLine text={neutralString} value={neutral} />
-            <StatisticsLine text={badString} value={bad} />
-            <StatisticsLine text={totalString} value={totalFeedbackCount()} />
-            <StatisticsLine text={averageScoreString} value={averageFeedbackScore()} />
-            <StatisticsLine text={positiveFeedbackString} value={percentagePositiveFeedback()} unit='%'/>
-            </>
+            <table>
+                <tbody>
+                    <StatisticsLine text={goodString} value={good} />
+                    <StatisticsLine text={neutralString} value={neutral} />
+                    <StatisticsLine text={badString} value={bad} />
+                    <StatisticsLine text={totalString} value={totalFeedbackCount()} />
+                    <StatisticsLine text={averageScoreString} value={averageFeedbackScore()} />
+                    <StatisticsLine text={positiveFeedbackString} value={percentagePositiveFeedback()} unit='%'/>
+                </tbody>
+            </table>
         )
     );
   }
