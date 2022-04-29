@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Button from './Button';
 
 const App = () => {
   const anecdotes = [
@@ -13,10 +14,29 @@ const App = () => {
 
   const [selected, setSelected] = useState(0);
 
+  /**
+   * Sets random index value to select a random anecdote.
+   * Has recursive logic to avoid displaying the same anecdote twice
+   * in a row.
+   */
+  const selectRandomAnecdote = () => {
+    if (anecdotes.length > 1)
+    {
+      const newSelected = Math.floor(Math.random() * anecdotes.length);
+      newSelected !== selected ? setSelected(newSelected) : selectRandomAnecdote();
+    }
+    else
+    {
+      console.log('Warning: Only one anecdote defined. Please add more anecdotes.')
+      setSelected(0)
+    }
+  }
+
   return (
-    <div>
-      {anecdotes[selected]}
-    </div>
+    <>
+      <div>{anecdotes[selected]}</div>
+      <Button handleClick={selectRandomAnecdote} text='next anecdote'/>
+    </>
   )
 }
 
