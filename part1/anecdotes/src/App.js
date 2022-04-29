@@ -13,6 +13,7 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0))
 
   /**
    * Sets random index value to select a random anecdote.
@@ -32,9 +33,20 @@ const App = () => {
     }
   }
 
+  /**
+   * Increments the vote for the currently selected anecdote
+   */
+  const incrementVote = () => {
+    const votesCopy = [ ...votes ];
+    votesCopy[selected] += 1;
+    setVotes(votesCopy);
+  }
+
   return (
     <>
       <div>{anecdotes[selected]}</div>
+      <div>has {votes[selected]} votes</div>
+      <Button handleClick={incrementVote} text='vote'/>
       <Button handleClick={selectRandomAnecdote} text='next anecdote'/>
     </>
   )
