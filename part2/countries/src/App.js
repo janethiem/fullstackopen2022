@@ -6,6 +6,7 @@ import DetailedCountry from './components/DetailedCountry'
 const App = () => {
   const [newCountry, setNewCountry] = useState('')
   const [countries, setCountries] = useState([])
+  const [detailedCountry, setDetailedCountry] = useState('')
   
   useEffect(() => {
     axios
@@ -13,8 +14,12 @@ const App = () => {
       .then(response => setCountries(response.data))
   }, [])
 
-  const handleCountryChanged = (event) => setNewCountry(event.target.value)
-
+  const handleCountryChanged = (event) => {
+    setNewCountry(event.target.value)
+    setDetailedCountry('');
+  }
+  const handleShowButtonClicked = (country) => setDetailedCountry(country)
+  
   const countriesToShow = newCountry
   ? countries.filter(country => country.name.common.toLowerCase().includes(newCountry))
   : [];
@@ -24,8 +29,13 @@ const App = () => {
       find countries: <input onChange={handleCountryChanged}></input>
       {
         countriesToShow.length === 1
-          ? <DetailedCountry country={countriesToShow[0]}></DetailedCountry>
-          : <CountryList countries={countriesToShow}></CountryList>
+        ? <DetailedCountry country={countriesToShow[0]}></DetailedCountry>
+        : <CountryList countries={countriesToShow} handleButtonClick={handleShowButtonClicked}></CountryList>
+      }
+      {
+        detailedCountry 
+          ? <DetailedCountry country={detailedCountry}></DetailedCountry>
+          : null
       }
     </>
   )
