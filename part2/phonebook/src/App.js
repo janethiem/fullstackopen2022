@@ -20,9 +20,24 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault();
-    if (persons.find(person => person.name === newName))
+    const existingPerson = persons.find(person => person.name.toLowerCase() === newName.toLowerCase());
+    if (existingPerson)
     {
-      alert(`${newName} is already added to the phonebook`)
+      if (window.confirm(
+          `${newName} is already added to the phonebook, replace the old number with a new one?`))
+       {
+          personService
+            .update({ ...existingPerson, number: newNumber})
+            .then(returnedPerson => {
+              setPersons(persons.map(person => 
+                person.id === returnedPerson.id
+                  ? returnedPerson
+                  : person
+              ));
+              setNewName('');
+              setNewNumber('');
+          });
+       }
     }
     else
     {
@@ -37,13 +52,9 @@ const App = () => {
           setPersons(persons.concat(returnedPerson));
           setNewName('');
           setNewNumber('');
-      })
+      });
     }
   }
-
-  const handleNameChange = event => setNewName(event.target.value);
-  const handleNumberChange = event => setNewNumber(event.target.value);
-  const handleFilterChange = event => setNewFilterName(event.target.value);
 
   const confirmDeletion = (name, id) => {
     if (window.confirm(`Delete ${name} ?`))
@@ -55,6 +66,10 @@ const App = () => {
           });
     }
   }
+
+  const handleNameChange = event => setNewName(event.target.value);
+  const handleNumberChange = event => setNewNumber(event.target.value);
+  const handleFilterChange = event => setNewFilterName(event.target.value);
 
   const namesToShow = newFilterName === '' 
     ? persons
