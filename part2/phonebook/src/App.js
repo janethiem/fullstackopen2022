@@ -1,14 +1,19 @@
 import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
+import './index.css'
 
 const App = () => {
-  const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
-  const [newFilterName, setNewFilterName] = useState('')
+  const [persons, setPersons] = useState([]);
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
+  const [newFilterName, setNewFilterName] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState(null);
+
+  const notificationTimeoutDuration = 5000;
 
   useEffect(() => {
     personService
@@ -36,6 +41,10 @@ const App = () => {
               ));
               setNewName('');
               setNewNumber('');
+              setNotificationMessage(`Updated ${existingPerson.name}`);
+              setTimeout(() => {
+                setNotificationMessage(null)
+              }, notificationTimeoutDuration);
           });
        }
     }
@@ -52,6 +61,10 @@ const App = () => {
           setPersons(persons.concat(returnedPerson));
           setNewName('');
           setNewNumber('');
+          setNotificationMessage(`Added ${returnedPerson.name}`);
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, notificationTimeoutDuration);
       });
     }
   }
@@ -63,6 +76,10 @@ const App = () => {
           .remove(id)
           .then((response) => {
             setPersons(persons.filter((person) => person.id !== id));
+            setNotificationMessage(`Deleted ${name}`);
+              setTimeout(() => {
+                setNotificationMessage(null)
+              }, notificationTimeoutDuration);
           });
     }
   }
@@ -78,6 +95,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
       <Filter filterName={newFilterName} handleFilterChange={handleFilterChange} />
       <h2>Add New Entry</h2>
       <PersonForm 
