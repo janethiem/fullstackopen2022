@@ -11,9 +11,16 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [newFilterName, setNewFilterName] = useState('');
-  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [notificationMessage, setNotificationMessage] = useState({
+    message: null,
+    success: false
+  });
 
-  const notificationTimeoutDuration = 5000;
+  const clearNotificationAfterTimeout = () => {
+    setTimeout(() => {
+      setNotificationMessage({message: null, success: false});
+    }, 3000);
+  }
 
   useEffect(() => {
     personService
@@ -41,11 +48,19 @@ const App = () => {
               ));
               setNewName('');
               setNewNumber('');
-              setNotificationMessage(`Updated ${existingPerson.name}`);
-              setTimeout(() => {
-                setNotificationMessage(null)
-              }, notificationTimeoutDuration);
-          });
+              setNotificationMessage({
+                message: `Updated ${existingPerson.name}`,
+                success: true
+              });
+              clearNotificationAfterTimeout();
+            })
+            .catch( (error) => {
+              setNotificationMessage({
+                message: `${existingPerson.name} was already deleted from the server`,
+                success: false
+              });
+              clearNotificationAfterTimeout();
+            });
        }
     }
     else
@@ -61,10 +76,11 @@ const App = () => {
           setPersons(persons.concat(returnedPerson));
           setNewName('');
           setNewNumber('');
-          setNotificationMessage(`Added ${returnedPerson.name}`);
-          setTimeout(() => {
-            setNotificationMessage(null)
-          }, notificationTimeoutDuration);
+          setNotificationMessage({
+            message: `Added ${returnedPerson.name}`,
+            success: true
+          });
+          clearNotificationAfterTimeout();
       });
     }
   }
@@ -76,10 +92,11 @@ const App = () => {
           .remove(id)
           .then((response) => {
             setPersons(persons.filter((person) => person.id !== id));
-            setNotificationMessage(`Deleted ${name}`);
-              setTimeout(() => {
-                setNotificationMessage(null)
-              }, notificationTimeoutDuration);
+            setNotificationMessage({
+              message: `Deleted ${name}`,
+              success: true
+            });
+            clearNotificationAfterTimeout();
           });
     }
   }
@@ -95,7 +112,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} />
+      <Notification message={notificationMessage.message} success={notificationMessage.success} />
       <Filter filterName={newFilterName} handleFilterChange={handleFilterChange} />
       <h2>Add New Entry</h2>
       <PersonForm 
